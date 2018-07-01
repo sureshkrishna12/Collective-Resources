@@ -1,0 +1,19 @@
+Desc: Notes on x86 boot process
+
+PC(x86) Boot Process:
+
+* When power is on the motherboard(the x86 processor) comes out of reset, it immediately begins executing from 0xFFFFFFF0, this address is hard-mapped to the EEPROM containing the BIOS code.
+* Executing directly from ROM is quite slow, so usually one of the first things the BIOS does is to copy and decompress the BIOS code into RAM, and it executes from there. The memory controller must be initialized first.
+* The BIOS takes care of that beforehand. It runs the POST tests, during which most hardware is initialized. 
+* BIOS doesnt need drivers to access the hardware, it uses a set of standard APIs that manufactures agree upon to bring a common interface the bios uses to communicate with the peripherals, these standard APIs provide minimum functionality.
+* At power-on, the BIOS will query the attached devices and determine what are needed and place them in the memory map.
+* This is why we hear a beep sound during the bios stage POST, and get a graphical interface minimal from our graphic card which has the VESA firmware, our keyboard lights turn on and off.
+* The BIOS does not need a driver to read the MBR from the bootable media. It just executes the instructions present at the first sector of the boot device.
+* It identifies a device is bootable through the bootable flag.
+* The BIOS decides if a drive is bootable from the 16-byte partition record(in 4 segments(|16|16|16|16|)), present after the MBR code area (after 446th byte). The first byte in each partition record represents the drive's bootable status (and is set to 0x80 if bootable, or 0x00 if not).
+* The last 2 bytes contain the signature(magic number), so in total 446 + 16 + 16 + 16 + 16 + 2 = 512 bytes.
+* BIOS validates the boot signature and only if its valid, BIOS loads the code upto 446 bytes into RAM and executes them also handling control over to the boot code.
+* "The 0xAA55 signature is the last two bytes of the first sector. If it is 0xAA55, then signature is valid and the BIOS will try booting the system. 
+* If it's not found or someother value is present we get an error message from BIOS that its unable to find a bootable disk. 
+* This signature in binary is 0b1010101001010101 the alternating pattern was a protection against certain failures.
+
