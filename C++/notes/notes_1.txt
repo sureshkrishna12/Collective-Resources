@@ -1,0 +1,17 @@
+Not for beginners, from a C programmer point of view without experience in OOPs these notes are done.
+
+1. Streams:
+   C++ has a standard library iostream to control input and output operations.
+   istream and ostream are two types available within the library.
+
+2. Character literals have type char whereas in C character literals have type int.
+
+   c++:
+	sizeof('a') == sizeof(char)
+   result:
+	True
+
+   c:
+	sizeof('a') == sizeof(char)
+   result:
+	False
